@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Sign Up – Sabula Shoe Point{% endblock %}
+{% block content %}
+<section class="section auth-section">
+  <div class="container">
+    <div class="auth-card glass-card">
+      <div class="auth-header">
+        <i class="fas fa-user-plus auth-icon"></i>
+        <h1>Create Account</h1>
+          <p>Join Sabula Shoe Point and start shopping</p>
+      </div>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash-alert flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      <form method="POST" class="auth-form">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" required placeholder="e.g. John Doe" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="your@email.com" />
+          <small style="color:var(--text-lighter);">Or use phone number below</small>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="e.g. 0709707841" />
+          <small style="color:var(--text-lighter);">Or use email above</small>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required minlength="6" placeholder="At least 6 characters" />
+        </div>
+        <div class="form-group">
+          <label for="confirm_password">Confirm Password</label>
+          <input type="password" id="confirm_password" name="confirm_password" required minlength="6" placeholder="Repeat password" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-user-plus"></i> Create Account</button>
+        <p class="auth-alt">Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

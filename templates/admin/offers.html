@@ -1,0 +1,81 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Offers & Discounts – Sabula Admin{% endblock %}
+{% block admin_content %}
+
+<div class="admin-header">
+  <h1>Offers & Discounts</h1>
+  <div class="admin-filters">
+    <a href="{{ url_for('admin_offers', sort='discount', page=1) }}" class="btn btn-sm {% if sort == 'discount' %}btn-primary{% else %}" style="background:var(--bg);{% endif %}">Lowest Price</a>
+    <a href="{{ url_for('admin_offers', sort='percent', page=1) }}" class="btn btn-sm {% if sort == 'percent' %}btn-primary{% else %}" style="background:var(--bg);{% endif %}">Highest % OFF</a>
+    <a href="{{ url_for('admin_offers', sort='name', page=1) }}" class="btn btn-sm {% if sort == 'name' %}btn-primary{% else %}" style="background:var(--bg);{% endif %}">Name A-Z</a>
+  </div>
+  <span style="font-size:0.85rem;color:var(--text-light);">{{ total }} products · Page {{ page }}/{{ total_pages }}</span>
+</div>
+
+<form method="POST" action="{{ url_for('admin_offers_update') }}">
+  <input type="hidden" name="page" value="{{ page }}" />
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Product</th><th>Category</th><th>Price (UGX)</th><th>Discount Price</th><th>% OFF</th><th>Badge</th><th>Flags</th><th>Stock</th><th>Save</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+      <tr>
+        <td><strong>{{ product.name }}</strong><br /><small style="color:var(--text-lighter);">ID: {{ product.id }}</small></td>
+        <td>{{ product.category.name }}</td>
+        <td>
+          <input type="number" name="price" value="{{ product.price|int }}" style="width:100px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.82rem;" />
+        </td>
+        <td>
+          <input type="number" name="discount_price" value="{{ product.discount_price|int }}" style="width:100px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.82rem;color:var(--sale);font-weight:600;" />
+        </td>
+        <td><strong style="color:var(--sale);">{{ product.discount_percent }}</strong></td>
+        <td>
+          <select name="badge" style="padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.78rem;">
+            <option value="HOT DEAL" {% if product.badge == 'HOT DEAL' %}selected{% endif %}>HOT DEAL</option>
+            <option value="LIMITED OFFER" {% if product.badge == 'LIMITED OFFER' %}selected{% endif %}>LIMITED</option>
+            <option value="70% OFF" {% if product.badge == '70% OFF' %}selected{% endif %}>70% OFF</option>
+            <option value="BEST DEAL" {% if product.badge == 'BEST DEAL' %}selected{% endif %}>BEST DEAL</option>
+            <option value="LUXURY" {% if product.badge == 'LUXURY' %}selected{% endif %}>LUXURY</option>
+            <option value="MEGA SALE" {% if product.badge == 'MEGA SALE' %}selected{% endif %}>MEGA SALE</option>
+          </select>
+        </td>
+        <td>
+          <label style="font-size:0.75rem;display:block;"><input type="checkbox" name="featured" {% if product.featured %}checked{% endif %} /> Featured</label>
+          <label style="font-size:0.75rem;display:block;"><input type="checkbox" name="trending" {% if product.trending %}checked{% endif %} /> Trending</label>
+          <label style="font-size:0.75rem;display:block;"><input type="checkbox" name="affordable" {% if product.affordable %}checked{% endif %} /> Affordable</label>
+        </td>
+        <td>
+          <label style="font-size:0.75rem;"><input type="checkbox" name="in_stock" {% if product.in_stock %}checked{% endif %} /> In Stock</label>
+        </td>
+        <td>
+          <input type="hidden" name="product_id" value="{{ product.id }}" />
+          <button type="submit" class="btn btn-sm btn-primary" style="font-size:0.75rem;padding:6px 14px;">Update</button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</form>
+
+{% if total_pages > 1 %}
+<div style="display:flex;justify-content:center;gap:8px;margin-top:20px;">
+  {% if page > 1 %}
+  <a href="{{ url_for('admin_offers', sort=sort, page=page-1) }}" class="btn btn-sm" style="background:var(--bg);">← Prev</a>
+  {% endif %}
+  {% for p in range(1, total_pages + 1) %}
+    {% if p == page %}
+    <span class="btn btn-sm btn-primary" style="opacity:0.8;">{{ p }}</span>
+    {% elif p <= 3 or p > total_pages - 3 or (p >= page - 1 and p <= page + 1) %}
+    <a href="{{ url_for('admin_offers', sort=sort, page=p) }}" class="btn btn-sm" style="background:var(--bg);">{{ p }}</a>
+    {% endif %}
+  {% endfor %}
+  {% if page < total_pages %}
+  <a href="{{ url_for('admin_offers', sort=sort, page=page+1) }}" class="btn btn-sm" style="background:var(--bg);">Next →</a>
+  {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

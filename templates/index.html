@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block title %}Sabula Shoe Point – Affordable Shoes, Big Discounts{% endblock %}
+{% block content %}
+
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="container hero-content">
+    <div class="hero-text">
+      <span class="hero-badge">BIG DISCOUNTS UP TO 70% OFF</span>
+      <h1>Step Into <span class="text-highlight">Style</span></h1>
+      <p class="hero-subtitle">Affordable Shoes, Big Discounts, Premium Style</p>
+      <p class="hero-desc">Shop the latest trends in sneakers, boots, heels &amp; more at Sabula Shoe Point. Unbeatable prices, premium quality, and fast delivery across Entebbe.</p>
+      <div class="hero-buttons">
+        <a href="#featured" class="btn btn-primary">Shop Now <i class="fas fa-arrow-right"></i></a>
+        <a href="#discounts" class="btn btn-outline">View Offers <i class="fas fa-tag"></i></a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">1000+</span><span class="stat-label">Happy Customers</span></div>
+        <div class="stat"><span class="stat-num">500+</span><span class="stat-label">Shoe Styles</span></div>
+        <div class="stat"><span class="stat-num">50%+</span><span class="stat-label">Avg. Savings</span></div>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=500&fit=crop&q=80" alt="Sabula Shoe Point collection" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<section class="section categories-section" id="categories">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Shop By Category</span>
+      <h2>Browse Our <span class="text-highlight">Categories</span></h2>
+      <p>Find exactly what you need from our wide selection</p>
+    </div>
+    <div class="categories-grid">
+      {% for cat in categories %}
+      <a href="{{ url_for('category_page', slug=cat.slug) }}" class="category-card">
+        <div class="category-icon"><i class="fas {{ cat.icon }}"></i></div>
+        <span class="category-name">{{ cat.name }}</span>
+        <span class="category-count">{{ cat.products|length }} styles</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section featured-section" id="featured">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Featured Collection</span>
+      <h2>Featured <span class="text-highlight">Products</span></h2>
+      <p>Our most popular picks for this season</p>
+    </div>
+    <div class="products-grid">
+      {% for product in featured %}
+      {% include "product_card.html" %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section discounts-section" id="discounts">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Best Deals</span>
+      <h2>Biggest <span class="text-highlight">Discounts</span></h2>
+      <p>Limited-time offers with massive savings</p>
+    </div>
+    <div class="products-grid">
+      {% for product in discounts %}
+      {% include "product_card.html" %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section trending-section" id="trending">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Trending Now</span>
+      <h2>Trending <span class="text-highlight">Shoes</span></h2>
+      <p>What everyone is loving right now</p>
+    </div>
+    <div class="products-grid">
+      {% for product in trending %}
+      {% include "product_card.html" %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section affordable-section" id="affordable">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Budget-Friendly</span>
+      <h2>Affordable <span class="text-highlight">Shoes</span></h2>
+      <p>Premium quality at prices you will love</p>
+    </div>
+    <div class="products-grid">
+      {% for product in affordable %}
+      {% include "product_card.html" %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section testimonials-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">What Our Customers Say</span>
+      <h2>Customer <span class="text-highlight">Reviews</span></h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testi-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p>"Incredible quality at such affordable prices! I ordered the Nike Air Max and they arrived in 2 days. Highly recommend Sabula Shoe Point!"</p>
+        <div class="testi-user"><div class="testi-avatar">SM</div><div><strong>Sarah M.</strong><span>Verified Buyer</span></div></div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testi-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p>"Best shoe store in Entebbe Kitooro! The discounts are unbelievable — I saved over 60% on formal shoes. WhatsApp ordering made it so easy."</p>
+        <div class="testi-user"><div class="testi-avatar">JK</div><div><strong>James K.</strong><span>Verified Buyer</span></div></div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testi-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p>"My whole family now shops here! From school shoes for the kids to luxury heels for me — always authentic and affordable. 5 stars!"</p>
+        <div class="testi-user"><div class="testi-avatar">PN</div><div><strong>Phiona N.</strong><span>Verified Buyer</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section care-section" id="contact">
+  <div class="container">
+    <div class="care-card">
+      <div class="care-content">
+        <span class="section-tag">Need Help?</span>
+        <h2>Customer <span class="text-highlight">Care</span></h2>
+        <p>We are here to help you find the perfect pair. Reach out to us anytime!</p>
+        <div class="care-info">
+          <div class="care-item">
+            <i class="fas fa-phone-alt"></i>
+            <div><strong>Call or WhatsApp</strong><a href="tel:+256709707841">+256 709 707841</a></div>
+          </div>
+          <div class="care-item">
+            <i class="fas fa-envelope"></i>
+            <div><strong>Email</strong><span>info@sabulashoes.com</span></div>
+          </div>
+          <div class="care-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div><strong>Location</strong><span>Entebbe Kitooro, Uganda</span></div>
+          </div>
+          <div class="care-item">
+            <i class="fas fa-clock"></i>
+            <div><strong>Working Hours</strong><span>Mon–Sat: 8:00 AM – 8:00 PM</span></div>
+          </div>
+        </div>
+        <a href="tel:+256709707841" class="btn btn-primary care-btn"><i class="fas fa-headset"></i> Call Customer Care</a>
+      </div>
+      <div class="care-image">
+        <img src="https://images.unsplash.com/photo-1605408499391-636e26a6823f?w=500&h=500&fit=crop&q=80" alt="Customer Care" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="newsletter-section">
+  <div class="container">
+    <div class="newsletter-card">
+      <h2>Get <span class="text-highlight">Exclusive</span> Offers</h2>
+      <p>Subscribe to receive the latest deals and new arrivals straight to your inbox</p>
+      <form class="newsletter-form" id="newsletterForm">
+        <input type="email" placeholder="Enter your email" required />
+        <button type="submit" class="btn btn-primary">Subscribe <i class="fas fa-paper-plane"></i></button>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

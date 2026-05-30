@@ -1,0 +1,89 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Dashboard – Sabula Admin{% endblock %}
+{% block admin_content %}
+
+<div class="admin-header">
+  <h1>Dashboard</h1>
+  <p>Welcome to Sabula Shoe Point admin panel</p>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-card-icon" style="background:rgba(212,168,83,0.1);color:var(--accent);"><i class="fas fa-shoe-prints"></i></div>
+    <div class="stat-card-info">
+      <span class="stat-card-num">{{ total_products }}</span>
+      <span class="stat-card-label">Total Products</span>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-icon" style="background:rgba(37,211,102,0.1);color:#25D366;"><i class="fas fa-shopping-bag"></i></div>
+    <div class="stat-card-info">
+      <span class="stat-card-num">{{ total_orders }}</span>
+      <span class="stat-card-label">Total Orders</span>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-icon" style="background:rgba(230,57,70,0.1);color:var(--sale);"><i class="fas fa-clock"></i></div>
+    <div class="stat-card-info">
+      <span class="stat-card-num">{{ pending_orders }}</span>
+      <span class="stat-card-label">Pending Orders</span>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-icon" style="background:rgba(99,102,241,0.1);color:#6366f1;"><i class="fas fa-tags"></i></div>
+    <div class="stat-card-info">
+      <span class="stat-card-num">{{ total_categories }}</span>
+      <span class="stat-card-label">Categories</span>
+    </div>
+  </div>
+</div>
+
+<div class="admin-section">
+  <div class="admin-section-header">
+    <h2>Recent Orders</h2>
+    <a href="{{ url_for('admin_orders') }}" class="btn btn-primary btn-sm">View All</a>
+  </div>
+  {% if recent_orders %}
+  <table class="admin-table">
+    <thead>
+      <tr><th>#</th><th>Customer</th><th>Phone</th><th>Total</th><th>Status</th><th>Date</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for order in recent_orders %}
+      <tr>
+        <td>#{{ order.id }}</td>
+        <td>{{ order.customer_name }}</td>
+        <td>{{ order.customer_phone }}</td>
+        <td>{{ order.total_amount|format_price }}</td>
+        <td><span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span></td>
+        <td>{{ order.created_at.strftime('%d %b %Y') }}</td>
+        <td><a href="{{ url_for('admin_order_detail', id=order.id) }}" class="btn btn-sm" style="background:var(--bg);">View</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p style="color:var(--text-light);padding:20px;">No orders yet.</p>
+  {% endif %}
+</div>
+
+<div class="admin-links">
+  <a href="{{ url_for('admin_products') }}" class="admin-link-card">
+    <i class="fas fa-shoe-prints"></i>
+    <span>Manage Products</span>
+  </a>
+  <a href="{{ url_for('admin_orders') }}" class="admin-link-card">
+    <i class="fas fa-shopping-bag"></i>
+    <span>Manage Orders</span>
+  </a>
+  <a href="{{ url_for('admin_product_add') }}" class="admin-link-card">
+    <i class="fas fa-plus-circle"></i>
+    <span>Add New Product</span>
+  </a>
+  <a href="{{ url_for('home') }}" class="admin-link-card" target="_blank">
+    <i class="fas fa-external-link-alt"></i>
+    <span>View Store</span>
+  </a>
+</div>
+
+{% endblock %}

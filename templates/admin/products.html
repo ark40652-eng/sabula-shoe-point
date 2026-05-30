@@ -1,0 +1,43 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Products – Sabula Admin{% endblock %}
+{% block admin_content %}
+
+<div class="admin-header">
+  <h1>Products</h1>
+  <a href="{{ url_for('admin_product_add') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Add Product</a>
+</div>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Photo</th><th>Name</th><th>Category</th><th>Price</th><th>Discount</th><th>Featured</th><th>Stock</th><th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in products %}
+    <tr>
+      <td>
+        {% if product.image_url %}
+        <img src="{{ product.image_url if product.image_url.startswith('http') else url_for('static', filename=product.image_url) }}" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:8px;" />
+        {% else %}
+        <div style="width:48px;height:48px;border-radius:8px;background:#f0f0f5;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:1.2rem;"><i class="fas fa-shoe-prints"></i></div>
+        {% endif %}
+      </td>
+      <td><strong>{{ product.name }}</strong></td>
+      <td>{{ product.category.name }}</td>
+      <td>{{ product.price|format_price }}</td>
+      <td>{{ product.discount_price|format_price }}<br /><small style="color:var(--sale);">{{ product.discount_percent }}</small></td>
+      <td>{% if product.featured %}<span style="color:#059669;">Yes</span>{% else %}No{% endif %}</td>
+      <td>{% if product.in_stock %}<span style="color:#059669;">In Stock</span>{% else %}<span style="color:var(--sale);">Out</span>{% endif %}</td>
+      <td>
+        <a href="{{ url_for('admin_product_edit', id=product.id) }}" class="btn btn-sm" style="background:var(--bg);">Edit</a>
+        <form action="{{ url_for('admin_product_delete', id=product.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete this product?')">
+          <button type="submit" class="btn btn-sm" style="background:rgba(230,57,70,0.1);color:var(--sale);">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

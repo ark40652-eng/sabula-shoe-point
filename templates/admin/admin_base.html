@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Admin – Sabula Shoe Point{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <div class="admin-wrapper">
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-brand">
+        <i class="fas fa-shoe-prints"></i>
+        <span>Sabula Admin</span>
+      </div>
+      <nav class="admin-sidebar-nav">
+        <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-chart-bar"></i> Dashboard</a>
+        <a href="{{ url_for('admin_products') }}"><i class="fas fa-shoe-prints"></i> Products</a>
+        <a href="{{ url_for('admin_product_add') }}"><i class="fas fa-plus"></i> Add Product</a>
+        <a href="{{ url_for('admin_orders') }}"><i class="fas fa-shopping-bag"></i> Orders</a>
+        <a href="{{ url_for('admin_offers') }}"><i class="fas fa-tags"></i> Offers & Discounts</a>
+        <hr style="border-color:rgba(255,255,255,0.06);margin:12px 0;" />
+        <a href="{{ url_for('home') }}" target="_blank"><i class="fas fa-external-link-alt"></i> View Store</a>
+        <a href="{{ url_for('admin_logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+    <main class="admin-main">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash-alert flash-{{ category }}" style="margin-bottom:16px;">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      {% block admin_content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>

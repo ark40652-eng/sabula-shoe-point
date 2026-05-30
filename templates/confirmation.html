@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Order Confirmed – Sabula Shoe Point{% endblock %}
+{% block content %}
+
+<section class="section">
+  <div class="container">
+    <div class="confirmation-card">
+      <div class="confirmation-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h1>Order <span class="text-highlight">Confirmed!</span></h1>
+      <p class="confirmation-subtitle">Thank you, {{ order.customer_name }}! Your order has been placed successfully.</p>
+      <div class="confirmation-details">
+        <div class="confirmation-row">
+          <span>Order Number</span>
+          <strong>#{{ order.id }}</strong>
+        </div>
+        <div class="confirmation-row">
+          <span>Phone</span>
+          <strong>{{ order.customer_phone }}</strong>
+        </div>
+        <div class="confirmation-row">
+          <span>Total Amount</span>
+          <strong style="color:var(--sale);font-size:1.2rem;">{{ order.total_amount|format_price }}</strong>
+        </div>
+        <div class="confirmation-row">
+          <span>Status</span>
+          <strong><span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span></strong>
+        </div>
+      </div>
+      <div class="confirmation-items">
+        <h3>Items Ordered</h3>
+        {% for item in order.items %}
+        <div class="confirmation-item">
+          <span>{{ item.product_name }}</span>
+          <span>Qty: {{ item.quantity }} × {{ item.price|format_price }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      <p style="color:var(--text-light);margin:24px 0;">
+        <i class="fab fa-whatsapp" style="color:#25D366;"></i> We will contact you on <strong>{{ order.customer_phone }}</strong> to confirm delivery details.
+      </p>
+      <div class="confirmation-actions">
+        <a href="{{ url_for('home') }}" class="btn btn-primary">Continue Shopping <i class="fas fa-arrow-right"></i></a>
+        <a href="https://wa.me/256709707841?text=Hello%20Sabula%20Shoe%20Point%2C%20I%20have%20a%20question%20about%20my%20order%20%23{{ order.id }}" target="_blank" class="btn btn-whatsapp">
+          <i class="fab fa-whatsapp"></i> Contact Support
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Order #{{ order.id }} – Sabula Admin{% endblock %}
+{% block admin_content %}
+
+<div class="admin-header">
+  <h1>Order #{{ order.id }}</h1>
+  <a href="{{ url_for('admin_orders') }}" class="btn btn-sm" style="background:var(--bg);">← All Orders</a>
+</div>
+
+<div class="admin-order-detail">
+  <div class="admin-order-info">
+    <h3>Customer Details</h3>
+    <p><strong>Name:</strong> {{ order.customer_name }}</p>
+    <p><strong>Phone:</strong> <a href="tel:{{ order.customer_phone }}">{{ order.customer_phone }}</a></p>
+    {% if order.customer_email %}<p><strong>Email:</strong> {{ order.customer_email }}</p>{% endif %}
+    <p><strong>Date:</strong> {{ order.created_at.strftime('%d %B %Y at %H:%M') }}</p>
+    <p><strong>Status:</strong> <span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span></p>
+    <p><strong>Total:</strong> <span style="font-size:1.3rem;font-weight:800;color:var(--sale);">{{ order.total_amount|format_price }}</span></p>
+  </div>
+
+  <div class="admin-order-status">
+    <h3>Update Status</h3>
+    <form action="{{ url_for('admin_order_status', id=order.id) }}" method="POST" style="display:flex;gap:8px;">
+      <select name="status" class="form-input" style="flex:1;">
+        <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+        <option value="Confirmed" {% if order.status == 'Confirmed' %}selected{% endif %}>Confirmed</option>
+        <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+        <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+        <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+      </select>
+      <button type="submit" class="btn btn-primary btn-sm">Update</button>
+    </form>
+    <div class="admin-whatsapp-link" style="margin-top:12px;">
+      <a href="https://wa.me/256709707841?text=Hello%20{{ order.customer_name|replace(' ', '%20') }}%2C%20your%20order%20%23{{ order.id }}%20from%20Sabula%20Shoe%20Point%20is%20{{ order.status }}." target="_blank" class="btn btn-whatsapp btn-sm">
+        <i class="fab fa-whatsapp"></i> Notify Customer via WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <div class="admin-order-items" style="grid-column:1/-1;">
+    <h3>Items ({{ order.items|length }})</h3>
+    <table class="admin-table">
+      <thead>
+        <tr><th>Product</th><th>Quantity</th><th>Price</th><th>Subtotal</th></tr>
+      </thead>
+      <tbody>
+        {% for item in order.items %}
+        <tr>
+          <td>{{ item.product_name }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.price|format_price }}</td>
+          <td>{{ (item.price * item.quantity)|format_price }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr><td colspan="3" style="text-align:right;font-weight:700;">Total:</td><td style="font-weight:800;color:var(--sale);">{{ order.total_amount|format_price }}</td></tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

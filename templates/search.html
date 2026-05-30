@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Search Results – Sabula Shoe Point{% endblock %}
+{% block content %}
+
+<section class="section page-header">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag"><i class="fas fa-search"></i> Search Results</span>
+      <h1>Results for "<span class="text-highlight">{{ query }}</span>"</h1>
+      <p>{{ results|length }} product(s) found</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    {% if results %}
+    <div class="products-grid">
+      {% for product in results %}
+      {% include "product_card.html" %}
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="search-empty">
+      <i class="fas fa-search"></i>
+      <p>No products found matching "{{ query }}". Try a different search term.</p>
+      <a href="{{ url_for('home') }}" class="btn btn-primary" style="margin-top:16px;">Back to Home</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

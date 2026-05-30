@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ category.name }} – Sabula Shoe Point{% endblock %}
+{% block content %}
+
+<section class="section page-header">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag"><i class="fas {{ category.icon }}"></i> {{ category.name }}</span>
+      <h1>{{ category.name }} <span class="text-highlight">Collection</span></h1>
+      <p>{{ products|length }} styles available – all at big discounts</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    {% if products %}
+    <div class="products-grid">
+      {% for product in products %}
+      {% include "product_card.html" %}
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="search-empty">
+      <i class="fas fa-box-open"></i>
+      <p>No products in this category yet. Check back soon!</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

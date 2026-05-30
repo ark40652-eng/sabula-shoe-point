@@ -1,0 +1,44 @@
+<div class="product-card fade-in">
+  <a href="{{ url_for('product_page', slug=product.slug) }}" class="product-image-wrapper">
+    {% if product.image_url %}
+    <img src="{{ product.image_url if product.image_url.startswith('http') else url_for('static', filename=product.image_url) }}" alt="{{ product.name }}" loading="lazy" />
+    {% else %}
+    <div class="product-img-placeholder"><i class="fas fa-shoe-prints"></i></div>
+    {% endif %}
+    <span class="product-badge">{{ product.discount_percent }}</span>
+    <span class="product-limited">{{ product.badge }}</span>
+  </a>
+  <div class="product-details">
+    <a href="{{ url_for('product_page', slug=product.slug) }}" class="product-name">{{ product.name }}</a>
+    <div class="product-rating">
+      <span class="stars">
+        {% for i in range(5) %}
+          {% if i < product.rating|int %}
+            <i class="fas fa-star"></i>
+          {% else %}
+            <i class="far fa-star"></i>
+          {% endif %}
+        {% endfor %}
+      </span>
+      <span class="rating-count">({{ product.reviews_count }})</span>
+    </div>
+    <div class="product-prices">
+      <span class="old-price">{{ product.price|format_price }}</span>
+      <span class="new-price">{{ product.discount_price|format_price }}</span>
+      <span class="discount-badge">{{ product.discount_percent }}</span>
+    </div>
+    <div class="product-stock">
+      <i class="fas fa-circle"></i> In Stock
+    </div>
+    <div class="product-actions">
+      <form action="{{ url_for('cart_add') }}" method="POST" style="flex:1;">
+        <input type="hidden" name="product_id" value="{{ product.id }}" />
+        <input type="hidden" name="quantity" value="1" />
+        <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-shopping-cart"></i> Add</button>
+      </form>
+      <a href="{{ url_for('order_whatsapp', product_id=product.id) }}" target="_blank" class="btn btn-whatsapp btn-sm">
+        <i class="fab fa-whatsapp"></i> Order
+      </a>
+    </div>
+  </div>
+</div>

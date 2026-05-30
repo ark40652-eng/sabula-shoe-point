@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}My Account – Sabula Shoe Point{% endblock %}
+{% block content %}
+<section class="section page-header">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag"><i class="fas fa-user"></i> My Account</span>
+      <h1>Welcome, <span class="text-highlight">{{ user.name }}</span></h1>
+      <p>{{ user.email or user.phone }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    <div class="account-grid">
+      <div class="account-sidebar glass-card">
+        <div class="account-avatar">{{ user.name[0] }}</div>
+        <h3>{{ user.name }}</h3>
+        <p>{% if user.email %}{{ user.email }}{% endif %}{% if user.phone %}{% if user.email %} · {% endif %}{{ user.phone }}{% endif %}</p>
+        <small style="color:var(--text-lighter);">Member since {{ user.created_at.strftime('%b %Y') }}</small>
+        <a href="{{ url_for('logout') }}" class="btn btn-sm" style="margin-top:16px;background:rgba(230,57,70,0.1);color:var(--sale);width:100%;justify-content:center;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+      <div class="account-orders">
+        <h2>My Orders</h2>
+        {% if orders %}
+        <div class="orders-list">
+          {% for order in orders %}
+          <div class="order-card glass-card">
+            <div class="order-card-header">
+              <div>
+                <strong>Order #{{ order.id }}</strong>
+                <span class="order-date">{{ order.created_at.strftime('%d %b %Y, %I:%M %p') }}</span>
+              </div>
+              <span class="order-status status-{{ order.status.lower() }}">{{ order.status }}</span>
+            </div>
+            <div class="order-card-body">
+              {% for item in order.items %}
+              <div class="order-item">
+                <span>{{ item.product_name }} × {{ item.quantity }}</span>
+                <span>{{ (item.price * item.quantity)|format_price }}</span>
+              </div>
+              {% endfor %}
+            </div>
+            <div class="order-card-footer">
+              <strong>Total: {{ order.total_amount|format_price }}</strong>
+              <small>{{ order.items|length }} item(s)</small>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+          <i class="fas fa-shopping-bag"></i>
+          <h3>No orders yet</h3>
+          <p>Start shopping and your orders will appear here.</p>
+          <a href="{{ url_for('home') }}" class="btn btn-primary">Shop Now</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

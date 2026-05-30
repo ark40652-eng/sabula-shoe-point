@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Checkout – Sabula Shoe Point{% endblock %}
+{% block content %}
+
+<section class="section page-header">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag"><i class="fas fa-credit-card"></i> Checkout</span>
+      <h1>Complete Your <span class="text-highlight">Order</span></h1>
+      <p>Fill in your details and we will confirm your order</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    <div class="checkout-layout">
+      <div class="checkout-form">
+        <form method="POST">
+          {% if current_user %}
+          <div class="flash-alert flash-info" style="margin-bottom:18px;">
+            <i class="fas fa-user"></i> Ordering as <strong>{{ current_user.name }}</strong>
+          </div>
+          {% endif %}
+          <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input type="text" id="name" name="name" required placeholder="Enter your full name" value="{{ current_user.name if current_user else '' }}" />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number *</label>
+            <input type="tel" id="phone" name="phone" required placeholder="e.g. 0709707841" value="{{ current_user.phone if current_user else '' }}" />
+          </div>
+          <div class="form-group">
+            <label for="email">Email (optional)</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" value="{{ current_user.email if current_user else '' }}" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:16px;font-size:1.05rem;">
+            <i class="fas fa-check-circle"></i> Place Order
+          </button>
+          <p style="text-align:center;margin-top:12px;font-size:0.82rem;color:var(--text-light);">
+            <i class="fab fa-whatsapp" style="color:#25D366;"></i> We will confirm your order via WhatsApp or phone call
+          </p>
+        </form>
+      </div>
+      <div class="checkout-summary">
+        <h3>Order Summary</h3>
+        {% for item in cart_items %}
+        <div class="checkout-item">
+          {% if item.product.image_url %}
+          <img src="{{ item.product.image_url if item.product.image_url.startswith('http') else url_for('static', filename=item.product.image_url) }}" alt="{{ item.product.name }}" />
+          {% else %}
+          <div class="product-img-placeholder" style="width:60px;height:60px;border-radius:10px;flex-shrink:0;"><i class="fas fa-shoe-prints" style="font-size:1.2rem;"></i></div>
+          {% endif %}
+          <div>
+            <strong>{{ item.product.name }}</strong>
+            <span>Qty: {{ item.quantity }} × {{ item.product.discount_price|format_price }}</span>
+          </div>
+          <span>{{ item.subtotal|format_price }}</span>
+        </div>
+        {% endfor %}
+        <hr />
+        <div class="checkout-total">
+          <span>Total</span>
+          <strong>{{ cart_total|format_price }}</strong>
+        </div>
+        <div class="checkout-whatsapp">
+          <p>Or order directly via WhatsApp:</p>
+          <a href="https://wa.me/256709707841?text=Hello%20Sabula%20Shoe%20Point%2C%20I%20want%20to%20place%20an%20order." target="_blank" class="btn btn-whatsapp" style="width:100%;justify-content:center;">
+            <i class="fab fa-whatsapp"></i> Order on WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

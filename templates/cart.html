@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Shopping Cart – Sabula Shoe Point{% endblock %}
+{% block content %}
+
+<section class="section page-header">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag"><i class="fas fa-shopping-cart"></i> Your Cart</span>
+      <h1>Shopping <span class="text-highlight">Cart</span></h1>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    {% if cart_items %}
+    <div class="cart-layout">
+      <div class="cart-items">
+        {% for item in cart_items %}
+        <div class="cart-item">
+          <a href="{{ url_for('product_page', slug=item.product.slug) }}" class="cart-item-img">
+            {% if item.product.image_url %}
+            <img src="{{ item.product.image_url if item.product.image_url.startswith('http') else url_for('static', filename=item.product.image_url) }}" alt="{{ item.product.name }}" />
+            {% else %}
+            <div class="product-img-placeholder" style="width:80px;height:80px;border-radius:12px;"><i class="fas fa-shoe-prints" style="font-size:1.5rem;"></i></div>
+            {% endif %}
+          </a>
+          <div class="cart-item-info">
+            <a href="{{ url_for('product_page', slug=item.product.slug) }}" class="cart-item-name">{{ item.product.name }}</a>
+            <div class="cart-item-price">{{ item.product.discount_price|format_price }} each</div>
+            <div class="cart-item-subtotal">Subtotal: <strong>{{ item.subtotal|format_price }}</strong></div>
+          </div>
+          <form action="{{ url_for('cart_update') }}" method="POST" class="cart-item-qty">
+            <input type="hidden" name="product_id" value="{{ item.product.id }}" />
+            <button type="submit" name="quantity" value="{{ item.quantity - 1 }}" {% if item.quantity <= 1 %}disabled style="opacity:0.3;"{% endif %}>−</button>
+            <span>{{ item.quantity }}</span>
+            <button type="submit" name="quantity" value="{{ item.quantity + 1 }}">+</button>
+          </form>
+          <form action="{{ url_for('cart_remove') }}" method="POST">
+            <input type="hidden" name="product_id" value="{{ item.product.id }}" />
+            <button type="submit" class="cart-item-remove" title="Remove"><i class="fas fa-trash-alt"></i></button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="cart-summary">
+        <h3>Order Summary</h3>
+        <div class="cart-summary-row">
+          <span>Items ({{ cart_count }})</span>
+          <span>{{ cart_total|format_price }}</span>
+        </div>
+        <div class="cart-summary-row">
+          <span>Delivery</span>
+          <span class="text-highlight">Free</span>
+        </div>
+        <hr />
+        <div class="cart-summary-row cart-summary-total">
+          <span>Total</span>
+          <span>{{ cart_total|format_price }}</span>
+        </div>
+        <a href="{{ url_for('checkout') }}" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:16px;">
+          Proceed to Checkout <i class="fas fa-arrow-right"></i>
+        </a>
+        <a href="{{ url_for('home') }}" class="btn btn-outline" style="width:100%;justify-content:center;margin-top:8px;color:var(--text);border-color:var(--border);">
+          Continue Shopping
+        </a>
+      </div>
+    </div>
+    {% else %}
+    <div class="search-empty">
+      <i class="fas fa-shopping-cart"></i>
+      <p>Your cart is empty. Start shopping now!</p>
+      <a href="{{ url_for('home') }}" class="btn btn-primary" style="margin-top:16px;">Browse Products</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} – Sabula Shoe Point{% endblock %}
+{% block content %}
+
+<section class="section product-detail-section">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="{{ url_for('home') }}">Home</a> <i class="fas fa-chevron-right"></i>
+      <a href="{{ url_for('category_page', slug=product.category.slug) }}">{{ product.category.name }}</a> <i class="fas fa-chevron-right"></i>
+      <span>{{ product.name }}</span>
+    </nav>
+
+    <div class="product-detail-grid">
+      <div class="product-detail-image">
+        {% if product.image_url %}
+        <img src="{{ product.image_url if product.image_url.startswith('http') else url_for('static', filename=product.image_url) }}" alt="{{ product.name }}" />
+        {% else %}
+        <div class="product-img-placeholder" style="width:100%;height:100%;min-height:400px;"><i class="fas fa-shoe-prints"></i></div>
+        {% endif %}
+      </div>
+      <div class="product-detail-info">
+        <span class="product-badge" style="position:static;display:inline-block;margin-bottom:12px;">{{ product.discount_percent }}</span>
+        <span class="product-limited" style="position:static;display:inline-block;margin-left:8px;">{{ product.badge }}</span>
+        <h1>{{ product.name }}</h1>
+        <div class="product-rating" style="margin:10px 0 16px;">
+          <span class="stars">
+            {% for i in range(5) %}
+              {% if i < product.rating|int %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+            {% endfor %}
+          </span>
+          <span class="rating-count">({{ product.reviews_count }} reviews)</span>
+        </div>
+        <div class="product-prices" style="margin-bottom:16px;">
+          <span class="old-price" style="font-size:1.3rem;">{{ product.price|format_price }}</span>
+          <span class="new-price" style="font-size:2rem;">{{ product.discount_price|format_price }}</span>
+          <span class="discount-badge" style="font-size:0.9rem;padding:5px 14px;">{{ product.discount_percent }}</span>
+        </div>
+        <div class="product-stock" style="font-size:0.95rem;margin-bottom:16px;">
+          <i class="fas fa-circle"></i> In Stock
+        </div>
+        <p class="product-description">{{ product.description }}</p>
+
+        <div class="product-detail-actions">
+          <form action="{{ url_for('cart_add') }}" method="POST">
+            <input type="hidden" name="product_id" value="{{ product.id }}" />
+            <input type="hidden" name="quantity" value="1" />
+            <button type="submit" class="btn btn-primary" style="padding:16px 40px;font-size:1.05rem;">
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+            </button>
+          </form>
+          <a href="{{ url_for('order_whatsapp', product_id=product.id) }}" target="_blank" class="btn btn-whatsapp" style="padding:16px 40px;font-size:1.05rem;">
+            <i class="fab fa-whatsapp"></i> Order on WhatsApp
+          </a>
+        </div>
+
+        <div class="product-detail-meta">
+          <div><strong>Category:</strong> <a href="{{ url_for('category_page', slug=product.category.slug) }}">{{ product.category.name }}</a></div>
+          <div><strong>Condition:</strong> Brand New / Authentic</div>
+          <div><strong>Delivery:</strong> Free delivery in Entebbe Kitooro</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if related %}
+<section class="section" style="background:var(--bg-alt);">
+  <div class="container">
+    <div class="section-header">
+      <h2>Related <span class="text-highlight">Products</span></h2>
+    </div>
+    <div class="products-grid">
+      {% for product in related %}
+      {% include "product_card.html" %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

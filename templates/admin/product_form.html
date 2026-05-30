@@ -1,0 +1,80 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}{% if product %}Edit {{ product.name }}{% else %}Add Product{% endif %} – Sabula Admin{% endblock %}
+{% block admin_content %}
+
+<div class="admin-header">
+  <h1>{% if product %}Edit Product{% else %}Add New Product{% endif %}</h1>
+  <a href="{{ url_for('admin_products') }}" class="btn btn-sm" style="background:var(--bg);">← Back</a>
+</div>
+
+<form method="POST" class="admin-form" enctype="multipart/form-data">
+  <div class="form-row">
+    <div class="form-group">
+      <label for="name">Product Name *</label>
+      <input type="text" id="name" name="name" value="{{ product.name if product else '' }}" required />
+    </div>
+    <div class="form-group">
+      <label for="category_id">Category *</label>
+      <select id="category_id" name="category_id" required>
+        {% for cat in categories %}
+        <option value="{{ cat.id }}" {% if product and product.category_id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="price">Original Price (UGX) *</label>
+      <input type="number" id="price" name="price" step="1000" value="{{ product.price if product else '' }}" required />
+    </div>
+    <div class="form-group">
+      <label for="discount_price">Discount Price (UGX)</label>
+      <input type="number" id="discount_price" name="discount_price" step="1000" value="{{ product.discount_price if product else '' }}" />
+      <small style="color:var(--text-lighter);">Leave empty to use original price (no discount)</small>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="discount_percent">Discount Badge (e.g. 64% OFF)</label>
+      <input type="text" id="discount_percent" name="discount_percent" value="{{ product.discount_percent if product else '' }}" placeholder="Auto-calculated if empty" />
+    </div>
+    <div class="form-group">
+      <label for="badge">Badge Label</label>
+      <select id="badge" name="badge">
+        <option value="HOT DEAL" {% if product and product.badge == 'HOT DEAL' %}selected{% endif %}>HOT DEAL</option>
+        <option value="LIMITED OFFER" {% if product and product.badge == 'LIMITED OFFER' %}selected{% endif %}>LIMITED OFFER</option>
+        <option value="70% OFF" {% if product and product.badge == '70% OFF' %}selected{% endif %}>70% OFF</option>
+        <option value="BEST DEAL" {% if product and product.badge == 'BEST DEAL' %}selected{% endif %}>BEST DEAL</option>
+        <option value="LUXURY" {% if product and product.badge == 'LUXURY' %}selected{% endif %}>LUXURY</option>
+        <option value="MEGA SALE" {% if product and product.badge == 'MEGA SALE' %}selected{% endif %}>MEGA SALE</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="image">Product Image</label>
+    <input type="file" id="image" name="image" accept="image/png,image/jpeg,image/jpg,image/gif,image/webp" />
+    <small style="color:var(--text-lighter);">Select an image from your gallery (PNG, JPG, WebP). Max 16MB.</small>
+    {% if product and product.image_url %}
+    <div style="margin-top:8px;">
+      <img src="{{ product.image_url if product.image_url.startswith('http') else url_for('static', filename=product.image_url) }}" alt="{{ product.name }}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;" />
+    </div>
+    {% endif %}
+  </div>
+  <div class="form-group">
+    <label for="rating">Rating (1–5)</label>
+    <input type="number" id="rating" name="rating" min="1" max="5" step="0.5" value="{{ product.rating if product else 5 }}" />
+  </div>
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="3" placeholder="Brief product description...">{{ product.description if product else '' }}</textarea>
+  </div>
+  <div class="form-checkboxes">
+    <label><input type="checkbox" name="in_stock" {% if not product or product.in_stock %}checked{% endif %} /> In Stock</label>
+    <label><input type="checkbox" name="featured" {% if product and product.featured %}checked{% endif %} /> Featured</label>
+    <label><input type="checkbox" name="trending" {% if product and product.trending %}checked{% endif %} /> Trending</label>
+    <label><input type="checkbox" name="affordable" {% if product and product.affordable %}checked{% endif %} /> Affordable</label>
+  </div>
+  <button type="submit" class="btn btn-primary">{% if product %}Update Product{% else %}Add Product{% endif %}</button>
+</form>
+
+{% endblock %}
