@@ -3,8 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>{% block title %}Sabula Shoe Point – Entebbe Kitooro{% endblock %}</title>
+
   <meta name="description" content="Sabula Shoe Point Entebbe Kitooro – Premium shoes at affordable prices. Shop Sneakers, Boots, Heels & more. Big discounts." />
+
+  <!-- ✅ Google Search Console Verification -->
+  <meta name="google-site-verification" content="YOUR_CODE_HERE" />
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
@@ -30,15 +36,18 @@
         <i class="fas fa-shoe-prints logo-icon"></i>
         <span class="logo-text">Sabula <span class="logo-highlight">Shoe Point</span></span>
       </a>
+
       <div class="search-bar" id="searchBar">
         <form action="{{ url_for('search') }}" method="GET" style="display:flex;width:100%;">
           <input type="text" name="q" placeholder="Search shoes..." autocomplete="off" value="{{ request.args.get('q', '') }}" />
           <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
         </form>
       </div>
+
       <nav class="nav-menu" id="navMenu">
         <ul class="nav-list">
-          <li><a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">Home</a></li>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+
           <li class="dropdown-trigger">
             <a href="#">Categories <i class="fas fa-chevron-down"></i></a>
             <div class="dropdown">
@@ -47,105 +56,56 @@
               {% endfor %}
             </div>
           </li>
-          <li><a href="{{ url_for('home') }}#featured">Featured</a></li>
-          <li><a href="{{ url_for('home') }}#discounts">Offers</a></li>
-          <li><a href="{{ url_for('home') }}#contact">Contact</a></li>
-          <li><a href="{{ url_for('cart') }}"><i class="fas fa-shopping-cart"></i> Cart {% if cart_count > 0 %}<span class="cart-badge">{{ cart_count }}</span>{% endif %}</a></li>
+
+          <li><a href="#featured">Featured</a></li>
+          <li><a href="#discounts">Offers</a></li>
+          <li><a href="#contact">Contact</a></li>
+
+          <li>
+            <a href="{{ url_for('cart') }}">
+              <i class="fas fa-shopping-cart"></i> Cart
+              {% if cart_count > 0 %}
+              <span class="cart-badge">{{ cart_count }}</span>
+              {% endif %}
+            </a>
+          </li>
+
           {% if current_user %}
           <li><a href="{{ url_for('account') }}"><i class="fas fa-user"></i> {{ current_user.name }}</a></li>
-          <li><a href="{{ url_for('logout') }}" style="color:var(--text-lighter);">Logout</a></li>
+          <li><a href="{{ url_for('logout') }}">Logout</a></li>
           {% else %}
-          <li><a href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+          <li><a href="{{ url_for('login') }}">Login</a></li>
           <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
           {% endif %}
+
           <li><a href="{{ url_for('admin_login') }}" style="color:var(--accent);"><i class="fas fa-lock"></i> Admin</a></li>
         </ul>
       </nav>
+
       <div class="nav-actions">
-        <a href="{{ url_for('cart') }}" class="nav-cart" aria-label="Cart">
+        <a href="{{ url_for('cart') }}" class="nav-cart">
           <i class="fas fa-shopping-cart"></i>
-          {% if cart_count > 0 %}<span class="cart-badge">{{ cart_count }}</span>{% endif %}
+          {% if cart_count > 0 %}
+          <span class="cart-badge">{{ cart_count }}</span>
+          {% endif %}
         </a>
-        <a href="tel:+256709707841" class="nav-call" aria-label="Call us"><i class="fas fa-phone-alt"></i></a>
-        <button class="menu-toggle" id="menuToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+
+        <a href="tel:+256709707841" class="nav-call">
+          <i class="fas fa-phone-alt"></i>
+        </a>
+
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
       </div>
     </div>
   </header>
-
-  <div class="flash-messages">
-    <div class="container">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          {% for category, message in messages %}
-            <div class="flash-alert flash-{{ category }}">
-              <span>{{ message }}</span>
-              <button class="flash-close" onclick="this.parentElement.remove()">&times;</button>
-            </div>
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
-    </div>
-  </div>
 
   {% block content %}{% endblock %}
 
   <footer class="footer">
     <div class="container">
-      <div class="footer-grid">
-        <div class="footer-col footer-brand">
-          <a href="{{ url_for('home') }}" class="logo">
-            <i class="fas fa-shoe-prints logo-icon"></i>
-            <span class="logo-text">Sabula <span class="logo-highlight">Shoe Point</span></span>
-          </a>
-          <p>Your premium destination for affordable, stylish shoes at Sabula Shoe Point Entebbe Kitooro. Big discounts, authentic products, and fast delivery.</p>
-          <div class="footer-social">
-            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-          </div>
-        </div>
-        <div class="footer-col">
-          <h4>Quick Links</h4>
-          <ul>
-          <li><a href="{{ url_for('home') }}">Home</a></li>
-          <li><a href="{{ url_for('home') }}#featured">Featured Products</a></li>
-          <li><a href="{{ url_for('home') }}#discounts">Best Discounts</a></li>
-          <li><a href="{{ url_for('cart') }}">Cart</a></li>
-          <li><a href="{{ url_for('home') }}#contact">Contact Us</a></li>
-          <li><a href="{{ url_for('admin_login') }}" style="color:var(--accent);font-size:0.78rem;"><i class="fas fa-lock"></i> Admin</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Categories</h4>
-          <ul>
-            {% for cat in categories[:8] %}
-            <li><a href="{{ url_for('category_page', slug=cat.slug) }}">{{ cat.name }}</a></li>
-            {% endfor %}
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Customer Service</h4>
-          <ul class="footer-contact">
-            <li><i class="fas fa-phone-alt"></i> <a href="tel:+256709707841">+256 709 707841</a></li>
-            <li><i class="fas fa-envelope"></i> info@sabulashoes.com</li>
-            <li><i class="fas fa-map-marker-alt"></i> Entebbe Kitooro, Uganda</li>
-          </ul>
-          <div class="footer-whatsapp">
-            <a href="https://wa.me/256709707841?text=Hello%20Sabula%20Shoe%20Point%2C%20I%20want%20to%20order%20a%20shoe." target="_blank" class="btn btn-whatsapp">
-              <i class="fab fa-whatsapp"></i> Order on WhatsApp
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 Sabula Shoe Point Entebbe Kitooro. All rights reserved.</p>
-        <p>Affordable Shoes, Big Discounts, Premium Quality</p>
-      </div>
+      <p>&copy; 2026 Sabula Shoe Point Entebbe Kitooro</p>
     </div>
   </footer>
-
-  <button class="back-to-top" id="backToTop" aria-label="Back to Top"><i class="fas fa-arrow-up"></i></button>
 
   <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
